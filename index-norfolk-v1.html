@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Virtual DOM & Diff — Camp David Satellite View</title>
+<title>Virtual DOM & Diff — Naval Station Norfolk</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap');
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -272,7 +272,6 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--sans);backgro
   cursor:pointer;transition:all .15s;
 }
 .log-drawer-head .log-action-btn:hover{background:rgba(255,255,255,.06)}
-
 /* ═══ DEMO CASES PANEL ═══ */
 .demo-panel{
   position:fixed;top:84px;right:16px;z-index:46;
@@ -458,21 +457,12 @@ body.mask-focus-mode #test-pane .ge-coords{
 
 /* ═══ GOOGLE EARTH MAP CONTENT (inside panes) ═══ */
 .ge-map{
-  position:relative;width:108%;height:104%;min-height:104vh;
-  top:-9%;left:0;
+  position:relative;width:100%;height:100%;min-height:100vh;
   border-radius:0;overflow:hidden;
-  transition:top .24s ease,left .24s ease,width .24s ease,height .24s ease;
   background:
-    var(--satellite-image, url('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=-77.478,39.643,-77.452,39.657&bboxSR=4326&size=2800,2000&format=png&f=image'))
+    var(--satellite-image, url('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=-76.343,36.932,-76.321,36.948&bboxSR=4326&size=2800,2554&format=png&f=image'))
     center/cover no-repeat,
     #0e200a;
-}
-body.demo-panel-open #actual-pane .ge-map,
-body.demo-panel-open #test-pane .ge-map{
-  width:114%;
-  height:109%;
-  top:-13%;
-  left:-6%;
 }
 .ge-map::before{
   content:'';position:absolute;top:0;left:0;right:0;bottom:0;
@@ -552,6 +542,7 @@ body.demo-panel-open #test-pane .ge-map{
   background:rgba(255,255,255,.045);color:#cfd6dd;
   border:1px solid rgba(255,255,255,.08);font-family:var(--sans)
 }
+.ge-info-tag.tag-blue{background:rgba(95,131,230,.08);color:#c5d3fb;border-color:rgba(95,131,230,.18)}
 .ge-info-tag.tag-green{background:rgba(106,144,117,.08);color:#b9cfbe;border-color:rgba(106,144,117,.18)}
 .ge-info-tag.tag-yellow{background:rgba(185,145,76,.08);color:#d6c39d;border-color:rgba(185,145,76,.18)}
 .ge-info-tag.tag-red{background:rgba(201,111,91,.08);color:#ddb4aa;border-color:rgba(201,111,91,.18)}
@@ -622,14 +613,12 @@ body:not(.sidebar-visible) .ge-sidebar{
 body:not(.info-visible) .ge-info-panel{
   opacity:0;visibility:hidden;pointer-events:none;transform:translateY(14px)
 }
-body.markers-force-hidden:not(.layout-calibrating) #actual-pane .ge-marker{
-  opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-10px) scale(.96)
-}
 body:not(.labels-visible) .ge-marker .ge-marker-label{
   opacity:0;visibility:hidden;transform:translateY(-6px) scale(.96);pointer-events:none
 }
-body:not(.labels-visible):not(.labels-force-hidden) .ge-marker:hover .ge-marker-label,
-body:not(.labels-visible):not(.labels-force-hidden) [data-layout-key="marker-camp-david"] .ge-marker-label{
+body:not(.labels-visible) .ge-marker:hover .ge-marker-label,
+body:not(.labels-visible) [data-layout-key="marker-submarine"] .ge-marker-label,
+body:not(.labels-visible) [data-layout-key="marker-nsn"] .ge-marker-label{
   opacity:1;visibility:visible;transform:translateY(0) scale(1);pointer-events:auto
 }
 body.layout-calibrating #actual-pane [data-layout-key].layout-selected::after{
@@ -646,6 +635,7 @@ body.layout-calibrating #actual-pane [data-layout-key].layout-selected::after{
   pointer-events:none;
   background:rgba(0,0,0,.001)
 }
+body.mask-focus-mode #test-pane .camo-region{pointer-events:auto;cursor:pointer}
 body.mask-focus-mode #test-pane .camo-region.is-selected{z-index:8}
 .camo-selection-layer{
   position:absolute;
@@ -852,7 +842,7 @@ body.camo-workflow-active #test-pane .ge-coords{
   </div>
   <div class="topbar-search">
     <span class="search-icon">&#128269;</span>
-    <span class="search-text">Camp David, Thurmont, MD</span>
+    <span class="search-text">Naval Station Norfolk, VA</span>
     <span class="search-voice">&#127908;</span>
   </div>
   <div class="topbar-controls">
@@ -939,8 +929,8 @@ body.camo-workflow-active #test-pane .ge-coords{
     <span class="align-toolbar-title">Actual Layout Align</span>
     <span class="align-toolbar-desc">Drag or delete markers and info cards. Changes autosave.</span>
   </div>
-  <button type="button" class="mask-hud-btn" id="btn-align-reset">Reset</button>
   <button type="button" class="mask-hud-btn exit" id="btn-align-delete" disabled>Delete Selected</button>
+  <button type="button" class="mask-hud-btn" id="btn-align-reset">Reset</button>
   <button type="button" class="mask-hud-btn exit" id="btn-align-done">Done</button>
 </div>
 
@@ -963,12 +953,12 @@ body.camo-workflow-active #test-pane .ge-coords{
 <!-- 하단 상태바 -->
 <div class="bottom-bar">
   <div class="bottom-bar-left">
-    <div class="coord-item"><span class="coord-label">LAT</span> 39.6480&deg;N</div>
-    <div class="coord-item"><span class="coord-label">LNG</span> 77.4650&deg;W</div>
+    <div class="coord-item"><span class="coord-label">LAT</span> 36.9397&deg;N</div>
+    <div class="coord-item"><span class="coord-label">LNG</span> 76.3333&deg;W</div>
     <div class="coord-item"><span class="coord-label">ELEV</span> 549m</div>
     <div class="coord-item"><span class="coord-label">EYE ALT</span> 1.2km</div>
   </div>
-  <div class="bottom-bar-center">Imagery &copy;2026 Maxar Technologies &middot; Map data &copy;2026 Google &middot; Catoctin Mountain, Frederick County, MD</div>
+  <div class="bottom-bar-center">Imagery &copy;2026 Maxar Technologies &middot; Map data &copy;2026 Google &middot; Norfolk, Virginia, USA</div>
   <div class="bottom-bar-right">
     <span class="vdom-status">V-DOM Engine Active</span>
     <div class="scale-bar"><div class="scale-line"></div><span>200m</span></div>
@@ -1021,11 +1011,11 @@ body.camo-workflow-active #test-pane .ge-coords{
 <script>
 // ═══ INTERACTIVE CAMO MASKING SYSTEM ═══
 var SAT_EXPORT_BASE_URL = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export';
-var SAT_BBOX = '-77.478,39.643,-77.452,39.657';
-var SAT_FULL_BBOX = { west: -77.478, south: 39.643, east: -77.452, north: 39.657 };
-var SAT_ASPECT_RATIO = 1.4;
+var SAT_BBOX = '-76.343,36.932,-76.321,36.948';
+var SAT_FULL_BBOX = { west: -76.343, south: 36.932, east: -76.321, north: 36.948 };
+var SAT_ASPECT_RATIO = 1.096;
 var SAT_DEFAULT_WIDTH = 2800;
-var SAT_DEFAULT_HEIGHT = 2000;
+var SAT_DEFAULT_HEIGHT = 2554;
 var SAT_DYNAMIC_ZOOM_THRESHOLD = 1.6;
 var SAT_MAX_WIDTH = 4096;
 var SAT_REFRESH_DEBOUNCE = 160;
@@ -1059,6 +1049,22 @@ var _mapViewState = {
   translateY: 0,
   isPanning: false
 };
+// 카모 샘플링 전용 — 항상 전체 영역 정적 위성 이미지 사용 (동적 모드와 분리)
+var _staticSatState = {
+  url: SAT_URL,
+  width: SAT_DEFAULT_WIDTH,
+  height: SAT_DEFAULT_HEIGHT
+};
+var _staticSatAnalysisState = {
+  url: SAT_URL,
+  sourceWidth: SAT_DEFAULT_WIDTH,
+  sourceHeight: SAT_DEFAULT_HEIGHT,
+  width: 0,
+  height: 0,
+  data: null,
+  ready: false,
+  requestId: 0
+};
 var _satelliteState = {
   url: SAT_URL,
   width: SAT_NATIVE_SIZE.width,
@@ -1070,14 +1076,14 @@ var _satelliteState = {
     frame: null
   }
 };
-var LAYOUT_STORAGE_KEY = 'camp-david-layout-v1';
-var LOG_DRAWER_STORAGE_KEY = 'camp-david-log-drawer-v1';
+var LAYOUT_STORAGE_KEY = 'norfolk-layout-v1';
+var LOG_DRAWER_STORAGE_KEY = 'norfolk-log-drawer-v1';
 var LOG_DRAWER_VISIBLE_PEEK = 44;
 var _layoutState = {
   active: false,
   positions: {},
-  selectedKey: null,
-  dragging: null
+  dragging: null,
+  selectedKey: null
 };
 var _logDrawerState = {
   dragging: false,
@@ -1087,9 +1093,7 @@ var _uiChromeState = {
   toolsOpen: false,
   showSidebar: false,
   showInfo: false,
-  showLabels: true,
-  forceHideLabels: false,
-  forceHideMarkers: false
+  showLabels: true
 };
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
@@ -1128,13 +1132,11 @@ function updateUiChromeState() {
   var labelsBtn = document.getElementById('btn-toggle-labels');
   var showSidebar = _uiChromeState.showSidebar;
   var showInfo = _uiChromeState.showInfo || (_layoutState.active && currentPane === 'actual');
-  var showLabels = (_uiChromeState.showLabels && !_uiChromeState.forceHideLabels) || (_layoutState.active && currentPane === 'actual');
+  var showLabels = _uiChromeState.showLabels || (_layoutState.active && currentPane === 'actual');
 
   document.body.classList.toggle('sidebar-visible', showSidebar);
   document.body.classList.toggle('info-visible', showInfo);
   document.body.classList.toggle('labels-visible', showLabels);
-  document.body.classList.toggle('labels-force-hidden', !!_uiChromeState.forceHideLabels && !showLabels);
-  document.body.classList.toggle('markers-force-hidden', !!_uiChromeState.forceHideMarkers && !_layoutState.active);
 
   if (toolsPanel) toolsPanel.classList.toggle('show', _uiChromeState.toolsOpen);
   if (toolsMenu) toolsMenu.classList.toggle('active', _uiChromeState.toolsOpen);
@@ -1160,10 +1162,6 @@ function toggleToolsPanel(force) {
 
 function toggleChromeVisibility(key) {
   _uiChromeState[key] = !_uiChromeState[key];
-  if (key === 'showLabels' && _uiChromeState[key]) {
-    _uiChromeState.forceHideLabels = false;
-    _uiChromeState.forceHideMarkers = false;
-  }
   updateUiChromeState();
 }
 
@@ -1232,8 +1230,8 @@ function initLogDrawerDrag() {
   var handle = document.getElementById('log-drag-handle');
   if (!drawer || !handle) return;
 
-  _logDrawerState.position = readLogDrawerPosition();
-  if (!_logDrawerState.position) _logDrawerState.position = { left: 16, top: getLogDrawerDockTop() };
+  try { window.localStorage.removeItem(LOG_DRAWER_STORAGE_KEY); } catch (err) {}
+  _logDrawerState.position = { left: 16, top: getLogDrawerDockTop() };
   applyLogDrawerPosition();
 
   handle.addEventListener('mousedown', function(e) {
@@ -1282,6 +1280,46 @@ function initLogDrawerDrag() {
 function buildSatelliteUrl(width, height, bboxOverride) {
   var bbox = bboxOverride || SAT_BBOX;
   return SAT_EXPORT_BASE_URL + '?bbox=' + bbox + '&bboxSR=4326&size=' + width + ',' + height + '&format=png&f=image';
+}
+
+function prepareStaticSatelliteAnalysis(url, width, height) {
+  var requestId = ++_staticSatAnalysisState.requestId;
+  _staticSatAnalysisState.url = url;
+  _staticSatAnalysisState.sourceWidth = width;
+  _staticSatAnalysisState.sourceHeight = height;
+  _staticSatAnalysisState.ready = false;
+  _staticSatAnalysisState.data = null;
+
+  var img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.decoding = 'async';
+  img.onload = function() {
+    if (requestId !== _staticSatAnalysisState.requestId) return;
+    try {
+      var maxSide = 1600;
+      var ratio = Math.min(1, maxSide / Math.max(width, height));
+      var canvas = document.createElement('canvas');
+      canvas.width = Math.max(1, Math.round(width * ratio));
+      canvas.height = Math.max(1, Math.round(height * ratio));
+      var ctx = canvas.getContext('2d', { willReadFrequently: true });
+      if (!ctx) return;
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      _staticSatAnalysisState.width = canvas.width;
+      _staticSatAnalysisState.height = canvas.height;
+      _staticSatAnalysisState.data = imageData.data;
+      _staticSatAnalysisState.ready = true;
+    } catch (err) {
+      _staticSatAnalysisState.ready = false;
+      _staticSatAnalysisState.data = null;
+    }
+  };
+  img.onerror = function() {
+    if (requestId !== _staticSatAnalysisState.requestId) return;
+    _staticSatAnalysisState.ready = false;
+    _staticSatAnalysisState.data = null;
+  };
+  img.src = url;
 }
 
 function getVisibleMapRect() {
@@ -1379,6 +1417,11 @@ function applySatelliteImagery(url, width, height) {
   _satelliteState.dynamic.active = false;
   _satelliteState.dynamic.bbox = SAT_BBOX;
   _satelliteState.dynamic.frame = null;
+  // 카모 샘플용 정적 이미지 갱신 (동적 모드에서도 카모는 이 이미지 사용)
+  _staticSatState.url = url;
+  _staticSatState.width = width;
+  _staticSatState.height = height;
+  prepareStaticSatelliteAnalysis(url, width, height);
   document.documentElement.style.setProperty('--satellite-image', 'url("' + url + '")');
   refreshAllCamoOverlayTiles();
 }
@@ -1492,12 +1535,6 @@ function getLayoutTargets(layoutKey) {
   return targets;
 }
 
-function getLayoutVisibleDisplay(el) {
-  if (!el) return '';
-  if (el.classList.contains('ge-marker')) return 'flex';
-  return 'block';
-}
-
 function applyLayoutPosition(el, position) {
   if (!el || !position) return;
   var left = parseFloat(position.left);
@@ -1517,6 +1554,7 @@ function getDefaultLayoutPosition(el) {
 
 function applyPersistedLayoutToArea(area) {
   if (!area) return;
+  var isActual = area === actualArea;
   var items = area.querySelectorAll('[data-layout-key]');
   for (var i = 0; i < items.length; i++) {
     var item = items[i];
@@ -1524,7 +1562,7 @@ function applyPersistedLayoutToArea(area) {
     var position = _layoutState.positions[key] || getDefaultLayoutPosition(item);
     var hidden = !!(position && position.hidden);
     item.style.display = hidden ? 'none' : getLayoutVisibleDisplay(item);
-    item.classList.toggle('layout-selected', !hidden && _layoutState.active && currentPane === 'actual' && _layoutState.selectedKey === key);
+    item.classList.toggle('layout-selected', !hidden && _layoutState.active && isActual && currentPane === 'actual' && _layoutState.selectedKey === key);
     if (!hidden && position) applyLayoutPosition(item, position);
   }
 }
@@ -1557,16 +1595,9 @@ function updateLayoutCalibrationUI() {
   updateMapPanClasses();
 }
 
-function setLayoutSelection(layoutKey) {
-  _layoutState.selectedKey = layoutKey || null;
-  updateLayoutCalibrationUI();
-}
-
 function enterLayoutCalibration() {
   if (currentPane !== 'actual') switchPane('actual');
   toggleToolsPanel(false);
-  _uiChromeState.forceHideLabels = false;
-  _uiChromeState.forceHideMarkers = false;
   _layoutState.active = true;
   updateLayoutCalibrationUI();
   if (typeof addLog === 'function' && logEl) addLog('info', 'Actual layout align mode enabled');
@@ -1583,18 +1614,15 @@ function exitLayoutCalibration() {
   if (typeof addLog === 'function' && logEl) addLog('info', 'Actual layout align mode closed');
 }
 
-function toggleLayoutCalibration() {
-  if (_layoutState.active && currentPane === 'actual') exitLayoutCalibration();
-  else enterLayoutCalibration();
+function getLayoutVisibleDisplay(el) {
+  if (!el) return '';
+  if (el.classList.contains('ge-marker')) return 'flex';
+  return 'block';
 }
 
-function resetLayoutCalibration() {
-  _layoutState.positions = {};
-  _layoutState.selectedKey = null;
-  writeLayoutPositions();
-  syncPersistedLayout(true);
+function setLayoutSelection(layoutKey) {
+  _layoutState.selectedKey = layoutKey || null;
   updateLayoutCalibrationUI();
-  if (typeof addLog === 'function' && logEl) addLog('info', 'Label positions reset to defaults');
 }
 
 function deleteSelectedLayoutTarget() {
@@ -1612,6 +1640,19 @@ function deleteSelectedLayoutTarget() {
   syncPersistedLayout(true);
   updateLayoutCalibrationUI();
   if (typeof addLog === 'function' && logEl) addLog('info', 'Deleted label mark for ' + key);
+}
+
+function toggleLayoutCalibration() {
+  if (_layoutState.active && currentPane === 'actual') exitLayoutCalibration();
+  else enterLayoutCalibration();
+}
+
+function resetLayoutCalibration() {
+  _layoutState.positions = {};
+  writeLayoutPositions();
+  syncPersistedLayout(true);
+  updateLayoutCalibrationUI();
+  if (typeof addLog === 'function' && logEl) addLog('info', 'Label positions reset to defaults');
 }
 
 // ═══ LOCK IN POSITIONS: localStorage 정렬값 → HTML 파일 자체에 영구 반영 후 다운로드 ═══
@@ -1894,6 +1935,9 @@ function initLayoutCalibration() {
     var geMap = getLayoutElementMap(actualArea);
     if (!geMap || !geMap.contains(target)) return;
 
+    var layoutKey = target.getAttribute('data-layout-key');
+    setLayoutSelection(layoutKey);
+
     e.preventDefault();
     e.stopPropagation();
 
@@ -1904,8 +1948,6 @@ function initLayoutCalibration() {
     var height = Math.max(1, rect.height / scale);
     var offsetX = clamp((e.clientX - rect.left) / scale, 0, width);
     var offsetY = clamp((e.clientY - rect.top) / scale, 0, height);
-    var layoutKey = target.getAttribute('data-layout-key');
-    setLayoutSelection(layoutKey);
 
     _layoutState.dragging = {
       key: layoutKey,
@@ -1963,6 +2005,120 @@ function getSatelliteFrame(mapSize) {
     height: height,
     offsetX: (mapSize.width - width) / 2,
     offsetY: (mapSize.height - height) / 2
+  };
+}
+
+// 카모 타일 전용 — 항상 전체 영역 정적 위성 이미지 기준 frame 반환
+// 동적 줌인 모드에서도 카모가 넓은 영역(순수 바다 등)에서 샘플 가능하게 함
+function getStaticSatelliteFrame(mapSize) {
+  var scale = Math.max(mapSize.width / _staticSatState.width, mapSize.height / _staticSatState.height);
+  var w = _staticSatState.width * scale;
+  var h = _staticSatState.height * scale;
+  return {
+    url: _staticSatState.url,
+    width: w,
+    height: h,
+    offsetX: (mapSize.width - w) / 2,
+    offsetY: (mapSize.height - h) / 2
+  };
+}
+
+function getStaticTextureStats(mapX, mapY, width, height, mapSize) {
+  if (!_staticSatAnalysisState.ready || !_staticSatAnalysisState.data || !mapSize) return null;
+  var frame = getStaticSatelliteFrame(mapSize);
+  if (!frame.width || !frame.height) return null;
+
+  var ax = (mapX - frame.offsetX) * (_staticSatAnalysisState.width / frame.width);
+  var ay = (mapY - frame.offsetY) * (_staticSatAnalysisState.height / frame.height);
+  var aw = width * (_staticSatAnalysisState.width / frame.width);
+  var ah = height * (_staticSatAnalysisState.height / frame.height);
+
+  var x0 = clamp(Math.round(ax), 0, _staticSatAnalysisState.width - 1);
+  var y0 = clamp(Math.round(ay), 0, _staticSatAnalysisState.height - 1);
+  var x1 = clamp(Math.round(ax + aw), x0 + 1, _staticSatAnalysisState.width);
+  var y1 = clamp(Math.round(ay + ah), y0 + 1, _staticSatAnalysisState.height);
+  if (x1 <= x0 || y1 <= y0) return null;
+
+  var cols = 6, rows = 6;
+  var data = _staticSatAnalysisState.data;
+  var sampleLuma = [];
+  var meanR = 0, meanG = 0, meanB = 0, count = 0;
+
+  for (var gy = 0; gy < rows; gy++) {
+    for (var gx = 0; gx < cols; gx++) {
+      var px = clamp(Math.round(x0 + (gx + 0.5) / cols * (x1 - x0)), 0, _staticSatAnalysisState.width - 1);
+      var py = clamp(Math.round(y0 + (gy + 0.5) / rows * (y1 - y0)), 0, _staticSatAnalysisState.height - 1);
+      var idx = (py * _staticSatAnalysisState.width + px) * 4;
+      var r = data[idx], g = data[idx + 1], b = data[idx + 2];
+      var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      sampleLuma.push(luma);
+      meanR += r;
+      meanG += g;
+      meanB += b;
+      count++;
+    }
+  }
+
+  if (!count) return null;
+  meanR /= count;
+  meanG /= count;
+  meanB /= count;
+
+  var meanLuma = 0;
+  for (var i = 0; i < sampleLuma.length; i++) meanLuma += sampleLuma[i];
+  meanLuma /= sampleLuma.length;
+
+  var variance = 0;
+  for (var j = 0; j < sampleLuma.length; j++) {
+    var diff = sampleLuma[j] - meanLuma;
+    variance += diff * diff;
+  }
+  variance /= sampleLuma.length;
+
+  var edge = 0;
+  for (var row = 0; row < rows; row++) {
+    for (var col = 0; col < cols; col++) {
+      var index = row * cols + col;
+      if (col < cols - 1) edge += Math.abs(sampleLuma[index] - sampleLuma[index + 1]);
+      if (row < rows - 1) edge += Math.abs(sampleLuma[index] - sampleLuma[index + cols]);
+    }
+  }
+
+  return {
+    meanR: meanR,
+    meanG: meanG,
+    meanB: meanB,
+    meanLuma: meanLuma,
+    variance: variance,
+    edge: edge
+  };
+}
+
+function getTextureScore(stats) {
+  if (!stats) return Infinity;
+  return stats.variance * 0.72 + stats.edge * 0.94;
+}
+
+function classifySurfaceProfile(stats) {
+  if (!stats) return 'unknown';
+  var blueBias = stats.meanB - (stats.meanR + stats.meanG) * 0.5;
+  var greenBias = stats.meanG - (stats.meanR + stats.meanB) * 0.5;
+  var channelSpread = Math.max(stats.meanR, stats.meanG, stats.meanB) - Math.min(stats.meanR, stats.meanG, stats.meanB);
+  if (blueBias > 8 && stats.variance < 520 && stats.edge < 1350 && stats.meanLuma < 150) return 'water';
+  if (greenBias > 6 && channelSpread > 8 && stats.variance > 110) return 'vegetation';
+  return 'land';
+}
+
+function getSelectionTextureContext(selection, mapSize) {
+  if (!selection || !mapSize) return { stats: null, profile: 'unknown' };
+  var insetW = Math.max(24, selection.w * 0.82);
+  var insetH = Math.max(24, selection.h * 0.82);
+  var insetX = clamp(selection.x + (selection.w - insetW) / 2, 0, Math.max(0, mapSize.width - insetW));
+  var insetY = clamp(selection.y + (selection.h - insetH) / 2, 0, Math.max(0, mapSize.height - insetH));
+  var stats = getStaticTextureStats(insetX, insetY, insetW, insetH, mapSize);
+  return {
+    stats: stats,
+    profile: classifySurfaceProfile(stats)
   };
 }
 
@@ -2436,7 +2592,7 @@ function buildCamoPanel() {
       '<div class="scan-line"><span>Status:</span><span class="scan-val">CONCEALED</span></div>' +
       '<div class="scan-line"><span>Regions:</span><span class="scan-val">' + regionCount + '</span></div>' +
       '<div class="scan-line"><span>Patches:</span><span class="scan-val">' + patchCount + '</span></div>' +
-      '<div class="scan-line"><span>Terrain:</span><span class="scan-val">CATOCTIN FOREST</span></div>' +
+      '<div class="scan-line"><span>Terrain:</span><span class="scan-val">ADJACENT TERRAIN</span></div>' +
       '</div>';
   }
 
@@ -2531,6 +2687,7 @@ function startCamoSelect() {
 }
 
 function buildSamplingOffsets(selection) {
+  // 거리를 넓게 잡아 피어 엣지 혼합 텍스처를 피하고 순수 지형(바다/숲 등)에서 샘플
   var padX = Math.max(60, selection.w * 0.8);
   var padY = Math.max(60, selection.h * 0.8);
   return [
@@ -2545,15 +2702,77 @@ function buildSamplingOffsets(selection) {
   ];
 }
 
-function pickDominantSamplingDirections(cx, cy, offsets, mapSize) {
+function getSamplingReferenceStats(offset, selection, mapSize, sampleW, sampleH) {
+  if (!offset || !selection || !mapSize) return null;
+  var gap = Math.max(10, Math.min(selection.w, selection.h) * 0.12);
+  var centerX = selection.x + selection.w / 2;
+  var centerY = selection.y + selection.h / 2;
+  if (offset.dx) centerX += Math.sign(offset.dx) * (selection.w / 2 + sampleW / 2 + gap);
+  if (offset.dy) centerY += Math.sign(offset.dy) * (selection.h / 2 + sampleH / 2 + gap);
+  var refX = clamp(centerX - sampleW / 2, 0, Math.max(0, mapSize.width - sampleW));
+  var refY = clamp(centerY - sampleH / 2, 0, Math.max(0, mapSize.height - sampleH));
+  if (rectTouchesSelection(refX, refY, sampleW, sampleH, selection)) return null;
+  return getStaticTextureStats(refX, refY, sampleW, sampleH, mapSize);
+}
+
+function getTextureMatchScore(stats, referenceStats) {
+  if (!stats) return Infinity;
+  if (!referenceStats) return getTextureScore(stats);
+  var dr = stats.meanR - referenceStats.meanR;
+  var dg = stats.meanG - referenceStats.meanG;
+  var db = stats.meanB - referenceStats.meanB;
+  var colorDelta = Math.sqrt(dr * dr + dg * dg + db * db);
+  var varianceDelta = Math.abs(stats.variance - referenceStats.variance) / Math.max(1, referenceStats.variance);
+  var edgeDelta = Math.abs(stats.edge - referenceStats.edge) / Math.max(1, referenceStats.edge);
+  return colorDelta + varianceDelta * 38 + edgeDelta * 22 + getTextureScore(stats) * 0.03;
+}
+
+// 맵 경계 거리 + 선택 영역 바로 주변 텍스처와의 유사도를 함께 보면서 top-2 방향을 반환
+function pickDominantSamplingDirections(cx, cy, offsets, mapSize, selection, targetContext) {
   var scores = [];
+  var probeW = Math.max(28, selection ? selection.w * 0.9 : 40);
+  var probeH = Math.max(28, selection ? selection.h * 0.9 : 40);
   for (var i = 0; i < offsets.length; i++) {
     var sx = cx + offsets[i].dx;
     var sy = cy + offsets[i].dy;
-    scores.push({ idx: i, score: Math.min(sx, mapSize.width - sx, sy, mapSize.height - sy) });
+    var openness = Math.min(sx, mapSize.width - sx, sy, mapSize.height - sy);
+    var referenceStats = getSamplingReferenceStats(offsets[i], selection, mapSize, probeW, probeH);
+    var stats = getStaticTextureStats(sx - probeW / 2, sy - probeH / 2, probeW, probeH, mapSize);
+    var profile = classifySurfaceProfile(referenceStats || stats);
+    var textureScore = getTextureMatchScore(stats, referenceStats);
+    if (targetContext && targetContext.stats) textureScore += getTextureMatchScore(referenceStats || stats, targetContext.stats) * 0.45;
+    if (targetContext && targetContext.profile !== 'unknown' && profile !== targetContext.profile) {
+      textureScore += profile === 'water' && targetContext.profile === 'land' ? 1200 : 450;
+    }
+    scores.push({
+      idx: i,
+      openness: openness,
+      referenceStats: referenceStats,
+      profile: profile,
+      textureScore: textureScore
+    });
   }
-  scores.sort(function(a, b) { return b.score - a.score; });
-  return [offsets[scores[0].idx], offsets[scores[1].idx]];
+  scores.sort(function(a, b) {
+    if (Math.abs(a.textureScore - b.textureScore) > 0.01) return a.textureScore - b.textureScore;
+    return b.openness - a.openness;
+  });
+  var first = scores[0];
+  var second = scores.length > 1 ? scores[1] : scores[0];
+  // top-2 방향만 허용 — 같은 텍스처 존에서 약간의 변화만 줌
+  return [
+    {
+      dx: offsets[first.idx].dx,
+      dy: offsets[first.idx].dy,
+      referenceStats: first.referenceStats,
+      profile: first.profile
+    },
+    {
+      dx: offsets[second.idx].dx,
+      dy: offsets[second.idx].dy,
+      referenceStats: second.referenceStats,
+      profile: second.profile
+    }
+  ];
 }
 
 function pointInPolygon(x, y, points) {
@@ -2621,25 +2840,35 @@ function rectTouchesSelection(x, y, width, height, selection) {
     y + height > selection.y;
 }
 
-function pickSampleSource(tileX, tileY, tileW, tileH, selection, mapSize, offsets) {
+function pickSampleSource(tileX, tileY, tileW, tileH, selection, mapSize, offsets, targetContext) {
+  // 카모는 정적 이미지 전체 영역에서 샘플 — 동적 bbox 제약 없음 (순수 바다 등 넓은 범위 접근)
   var minX = 0;
   var minY = 0;
   var maxX = Math.max(0, mapSize.width - tileW);
   var maxY = Math.max(0, mapSize.height - tileH);
-  if (_satelliteState.dynamic.active && _satelliteState.dynamic.frame) {
-    minX = clamp(_satelliteState.dynamic.frame.offsetX, 0, maxX);
-    minY = clamp(_satelliteState.dynamic.frame.offsetY, 0, maxY);
-    maxX = clamp(_satelliteState.dynamic.frame.offsetX + _satelliteState.dynamic.frame.width - tileW, minX, maxX);
-    maxY = clamp(_satelliteState.dynamic.frame.offsetY + _satelliteState.dynamic.frame.height - tileH, minY, maxY);
-  }
+  var best = null;
+  var bestScore = Infinity;
   for (var attempt = 0; attempt < 14; attempt++) {
     var offset = offsets[Math.floor(Math.random() * offsets.length)];
+    // 지터 축소: 지정 방향 범위 밖으로 크게 벗어나지 않게 (텍스처 존 이탈 방지)
     var srcX = clamp(tileX + offset.dx + randomBetween(-12, 12), minX, maxX);
     var srcY = clamp(tileY + offset.dy + randomBetween(-12, 12), minY, maxY);
-    if (!rectTouchesSelection(srcX, srcY, tileW, tileH, selection)) {
-      return { x: Math.round(srcX), y: Math.round(srcY) };
+    if (rectTouchesSelection(srcX, srcY, tileW, tileH, selection)) continue;
+    var stats = getStaticTextureStats(srcX, srcY, tileW, tileH, mapSize);
+    var score = getTextureMatchScore(stats, offset.referenceStats);
+    if (targetContext && targetContext.stats) score += getTextureMatchScore(stats, targetContext.stats) * 0.7;
+    var profile = classifySurfaceProfile(stats);
+    if (targetContext && targetContext.profile !== 'unknown' && profile !== targetContext.profile) {
+      score += profile === 'water' && targetContext.profile === 'land' ? 1800 : 520;
+    }
+    if (!isFinite(score)) score = attempt * 0.5;
+    else score += attempt * 0.08;
+    if (score < bestScore) {
+      bestScore = score;
+      best = { x: Math.round(srcX), y: Math.round(srcY) };
     }
   }
+  if (best) return best;
   var fallbackX = selection.x + selection.w + 32;
   if (fallbackX + tileW > mapSize.width) fallbackX = selection.x - tileW - 32;
   var fallbackY = selection.y - tileH - 32;
@@ -2665,7 +2894,7 @@ function createCamoOverlay(tileX, tileY, tileW, tileH, source, frame, kind) {
   var inner = document.createElement('div');
   inner.className = 'camo-overlay-tile';
   inner.style.cssText =
-    'background-image:url(' + SAT_URL + ');' +
+    'background-image:url(' + (frame.url || SAT_URL) + ');' +
     'background-size:' + frame.width.toFixed(2) + 'px ' + frame.height.toFixed(2) + 'px;' +
     'background-position:' + (frame.offsetX - source.x).toFixed(2) + 'px ' + (frame.offsetY - source.y).toFixed(2) + 'px;' +
     'transform:scale(' + randomBetween(1.06, 1.14).toFixed(2) + ') rotate(' + randomBetween(-4, 4).toFixed(2) + 'deg);' +
@@ -2678,7 +2907,8 @@ function refreshCamoOverlayTiles(geMap) {
   if (!geMap) return;
   var overlays = geMap.querySelectorAll('.camo-overlay');
   if (!overlays.length) return;
-  var frame = getSatelliteFrame(getMapLocalSize(geMap));
+  // 항상 정적 frame 사용 — 동적 줌인 상태에서도 카모 타일은 전체 영역 이미지 기준
+  var frame = getStaticSatelliteFrame(getMapLocalSize(geMap));
   for (var i = 0; i < overlays.length; i++) {
     var overlay = overlays[i];
     var inner = overlay.querySelector('.camo-overlay-tile');
@@ -2686,7 +2916,7 @@ function refreshCamoOverlayTiles(geMap) {
     var sourceX = parseFloat(overlay.getAttribute('data-source-x'));
     var sourceY = parseFloat(overlay.getAttribute('data-source-y'));
     if (!isFinite(sourceX) || !isFinite(sourceY)) continue;
-    inner.style.backgroundImage = 'url(' + SAT_URL + ')';
+    inner.style.backgroundImage = 'url(' + frame.url + ')';
     inner.style.backgroundSize = frame.width.toFixed(2) + 'px ' + frame.height.toFixed(2) + 'px';
     inner.style.backgroundPosition = (frame.offsetX - sourceX).toFixed(2) + 'px ' + (frame.offsetY - sourceY).toFixed(2) + 'px';
   }
@@ -2703,11 +2933,13 @@ function applyCamo() {
   var mapSize = getMapLocalSize(geMap);
   if (!mapSize.width || !mapSize.height) return;
   var selection = _camoState.selection;
-  var frame = getSatelliteFrame(mapSize);
+  // 카모 타일은 항상 전체 영역 정적 이미지 기준 — 동적 줌인 시 타이트 bbox 영역 밖(순수 바다 등) 샘플 가능
+  var frame = getStaticSatelliteFrame(mapSize);
   var rawOffsets = buildSamplingOffsets(selection);
   var selCx = selection.x + selection.w / 2;
   var selCy = selection.y + selection.h / 2;
-  var offsets = pickDominantSamplingDirections(selCx, selCy, rawOffsets, mapSize);
+  var targetContext = getSelectionTextureContext(selection, mapSize);
+  var offsets = pickDominantSamplingDirections(selCx, selCy, rawOffsets, mapSize, selection, targetContext);
 
   clearSelectionPreview(geMap);
   var region = createCamoRegion(geMap, selection);
@@ -2738,7 +2970,7 @@ function applyCamo() {
       var tileY = cy - patchRadius;
       var tileW = patchRadius * 2;
       var tileH = patchRadius * 2;
-      var source = pickSampleSource(tileX, tileY, tileW, tileH, selection, mapSize, offsets);
+      var source = pickSampleSource(tileX, tileY, tileW, tileH, selection, mapSize, offsets, targetContext);
       var overlay = createCamoOverlay(tileX, tileY, tileW, tileH, source, frame, 'soft');
       overlayLayer.appendChild(overlay);
       addedPatches++;
@@ -2752,7 +2984,7 @@ function applyCamo() {
     var edgeTileY = edgePoint.y - edgeRadius;
     var edgeTileW = edgeRadius * 2;
     var edgeTileH = edgeRadius * 2;
-    var edgeSource = pickSampleSource(edgeTileX, edgeTileY, edgeTileW, edgeTileH, selection, mapSize, offsets);
+    var edgeSource = pickSampleSource(edgeTileX, edgeTileY, edgeTileW, edgeTileH, selection, mapSize, offsets, targetContext);
     var edgeOverlay = createCamoOverlay(edgeTileX, edgeTileY, edgeTileW, edgeTileH, edgeSource, frame, 'soft');
     overlayLayer.appendChild(edgeOverlay);
     addedPatches++;
@@ -2765,7 +2997,7 @@ function applyCamo() {
       var fallbackX = fallbackPoint.x - fallbackRadius;
       var fallbackY = fallbackPoint.y - fallbackRadius;
       var fallbackSize = fallbackRadius * 2;
-      var fallbackSource = pickSampleSource(fallbackX, fallbackY, fallbackSize, fallbackSize, selection, mapSize, offsets);
+      var fallbackSource = pickSampleSource(fallbackX, fallbackY, fallbackSize, fallbackSize, selection, mapSize, offsets, targetContext);
       var fallbackOverlay = createCamoOverlay(fallbackX, fallbackY, fallbackSize, fallbackSize, fallbackSource, frame, 'soft');
       overlayLayer.appendChild(fallbackOverlay);
       addedPatches++;
@@ -2880,64 +3112,40 @@ var SAMPLE_HTML = [
 '<div class="ge-logo">Google Earth</div>',
 '<div class="ge-search">',
 '<span class="ge-search-icon">&#128269;</span>',
-'<span class="ge-search-text">Camp David, Thurmont, MD</span>',
+'<span class="ge-search-text">Naval Station Norfolk, VA</span>',
 '<span class="ge-search-voice">&#127908;</span>',
 '</div>',
 
-// Marker 1 — Aspen Lodge (메인 건물 단지 상단)
-'<div class="ge-marker" data-layout-key="marker-aspen" data-default-top="62" data-default-left="48.5" style="top:62%;left:48.5%">',
-'<div class="ge-pin ge-pin-red"><span class="ge-pin-inner">1</span></div>',
-'<span class="ge-marker-label">Aspen Lodge</span>',
+// Marker 1 — Submarine (주 타겟 — 잠수함, Pier 4 남쪽 계류)
+'<div class="ge-marker label-top" data-layout-key="marker-submarine" data-default-top="51.9" data-default-left="44.1" style="top:51.9%;left:44.1%">',
+'<div class="ge-pin ge-pin-red"><span class="ge-pin-inner">&#9203;</span></div>',
+'<span class="ge-marker-label">Submarine</span>',
 '</div>',
 
-// Marker 2 — Laurel Lodge (상단 건물들, 숲 속)
-'<div class="ge-marker" data-layout-key="marker-laurel" data-default-top="48.6" data-default-left="54.6" style="top:48.6%;left:54.6%">',
-'<div class="ge-pin ge-pin-blue"><span class="ge-pin-inner">2</span></div>',
-'<span class="ge-marker-label">Laurel Lodge</span>',
+// Marker 2 — Pier 4 (잠수함 부두)
+'<div class="ge-marker" data-layout-key="marker-pier4" data-default-top="47" data-default-left="48" style="top:47%;left:48%">',
+'<div class="ge-pin ge-pin-blue"><span class="ge-pin-inner">P4</span></div>',
+'<span class="ge-marker-label">Pier 4</span>',
 '</div>',
 
-// Marker 3 — Camp David 중심 (구글어스 스크린샷 마커 위치 그대로)
-'<div class="ge-marker" data-layout-key="marker-camp-david" data-default-top="53.6" data-default-left="51.9" style="top:53.6%;left:51.9%">',
-'<div class="ge-pin ge-pin-green"><span class="ge-pin-inner">&#127963;</span></div>',
-'<span class="ge-marker-label">Camp David</span>',
+// Marker 3 — Naval Station Norfolk 중심
+'<div class="ge-marker" data-layout-key="marker-nsn" data-default-top="35" data-default-left="55" style="top:35%;left:55%">',
+'<div class="ge-pin ge-pin-green"><span class="ge-pin-inner">&#9875;</span></div>',
+'<span class="ge-marker-label">Naval Station Norfolk</span>',
 '</div>',
 
-// Marker 4 — Holly Cabin (건물 단지 아래쪽)
-'<div class="ge-marker" data-layout-key="marker-holly" data-default-top="70" data-default-left="43.1" style="top:70%;left:43.1%">',
-'<div class="ge-pin ge-pin-yellow"><span class="ge-pin-inner">4</span></div>',
-'<span class="ge-marker-label">Holly Cabin</span>',
-'</div>',
-
-// Marker 5 — Skeet Shooting Range (좌측 하단, 이미지 스크린샷 위치)
-'<div class="ge-marker" data-layout-key="marker-skeet" data-default-top="87" data-default-left="19.2" style="top:87%;left:19.2%">',
-'<div class="ge-pin ge-pin-green"><span class="ge-pin-inner">5</span></div>',
-'<span class="ge-marker-label">Skeet Shooting Range</span>',
-'</div>',
-
-// Marker 6 — Helipad (건물 앞 별 모양 헬기장)
-'<div class="ge-marker label-top" data-layout-key="marker-helipad" data-default-top="72.9" data-default-left="49.2" style="top:72.9%;left:49.2%">',
-'<div class="ge-pin ge-pin-red"><span class="ge-pin-inner">H</span></div>',
-'<span class="ge-marker-label">Helipad</span>',
-'</div>',
-
-// Marker 7 — Putting Green (우측 녹지 공터)
-'<div class="ge-marker" data-layout-key="marker-putting" data-default-top="44.3" data-default-left="73.1" style="top:44.3%;left:73.1%">',
-'<div class="ge-pin ge-pin-yellow"><span class="ge-pin-inner">7</span></div>',
-'<span class="ge-marker-label">Putting Green</span>',
-'</div>',
-
-// Info panel — Aspen Lodge (마커 옆에 표시)
-'<div class="ge-info-panel" data-layout-key="panel-aspen" data-default-top="54" data-default-left="53.8" style="position:absolute;top:54%;left:53.8%;z-index:4">',
-'<h3>Aspen Lodge</h3>',
-'<div class="ge-info-type">Presidential Retreat &middot; Catoctin Mountain</div>',
-'<p>미국 대통령의 공식 별장. Catoctin Mountain Park 내 해발 549m에 위치한 최고 보안 시설.</p>',
+// Info panel — Submarine (잠수함 마커 옆)
+'<div class="ge-info-panel" data-layout-key="panel-submarine" data-default-top="43" data-default-left="47" style="position:absolute;top:43%;left:47%;z-index:4">',
+'<h3>Attack Submarine</h3>',
+'<div class="ge-info-type">Naval Station Norfolk &middot; Pier 4</div>',
+'<p>미 해군 핵추진 공격잠수함. Pier 4 계류 중. 36°56\'22.98"N 76°19\'59.78"W</p>',
 '<div class="ge-info-tags">',
-'<span class="ge-info-tag tag-red">TOP SECRET</span>',
-'<span class="ge-info-tag tag-green">Presidential</span>',
-'<span class="ge-info-tag tag-yellow">Helipad</span>',
-'<span class="ge-info-tag">USMC Security</span>',
+'<span class="ge-info-tag tag-red">CLASSIFIED</span>',
+'<span class="ge-info-tag tag-blue">USN</span>',
+'<span class="ge-info-tag tag-yellow">Nuclear</span>',
+'<span class="ge-info-tag">Pier 4</span>',
 '</div>',
-'<div class="ge-streetview">&#128247; Street View (Restricted)</div>',
+'<div class="ge-streetview">&#128247; Imagery Restricted</div>',
 '</div>',
 
 
@@ -2955,21 +3163,21 @@ var SAMPLE_HTML = [
 '<div class="ge-sidebar-card">',
 '<h4>&#9729;&#65039; Weather</h4>',
 '<div class="ge-weather">',
-'<span class="ge-weather-icon">&#127787;&#65039;</span>',
-'<span class="ge-weather-temp">8&deg;C</span>',
-'<span class="ge-weather-desc">Thurmont &middot; Overcast</span>',
+'<span class="ge-weather-icon">&#9925;&#65039;</span>',
+'<span class="ge-weather-temp">18&deg;C</span>',
+'<span class="ge-weather-desc">Norfolk &middot; Partly Cloudy</span>',
 '</div>',
 '</div>',
 
 '<div class="ge-sidebar-card">',
-'<h4>&#127963; Facilities</h4>',
+'<h4>&#9875; Naval Assets</h4>',
 '<div class="ge-timeline">',
 '<div class="ge-timeline-dot current"></div>',
-'<span class="ge-timeline-label">Lodge</span>',
+'<span class="ge-timeline-label">Submarine</span>',
 '<div class="ge-timeline-dot current"></div>',
-'<span class="ge-timeline-label">Helipad</span>',
+'<span class="ge-timeline-label">Pier 4</span>',
 '<div class="ge-timeline-dot current"></div>',
-'<span class="ge-timeline-label">Range</span>',
+'<span class="ge-timeline-label">Carrier</span>',
 '</div>',
 '</div>',
 '</div>',
@@ -2984,9 +3192,9 @@ var SAMPLE_HTML = [
 '<span class="ge-scale-text">100m</span>',
 '</div>',
 '<div class="ge-coords">',
-'<span><span class="ge-coord-label">LAT</span> 39.6480&deg;N</span>',
-'<span><span class="ge-coord-label">LNG</span> 77.4650&deg;W</span>',
-'<span><span class="ge-coord-label">ELEV</span> 549m</span>',
+'<span><span class="ge-coord-label">LAT</span> 36.9397&deg;N</span>',
+'<span><span class="ge-coord-label">LNG</span> 76.3333&deg;W</span>',
+'<span><span class="ge-coord-label">ELEV</span> 2m</span>',
 '</div>',
 '</div>'
 ].join('');
@@ -3189,7 +3397,7 @@ function collectAllLogs(containerPatches) {
 var actualArea, testArea, logEl, currentVNodes = [];
 var selectedEl = null;
 var currentPane = 'actual';
-var DEMO_TARGET_KEYS = ['marker-aspen', 'marker-laurel', 'panel-aspen'];
+var DEMO_TARGET_KEYS = ['marker-submarine', 'marker-pier4', 'panel-submarine'];
 var DEMO_CASES = [
   {
     id: 'noop',
@@ -3206,33 +3414,33 @@ var DEMO_CASES = [
     id: 'text',
     title: 'Text Node Change',
     badge: 'REPLACE(TEXT)',
-    description: '마커 라벨 텍스트만 바꿔서 텍스트 노드 교체 diff를 재현합니다.',
+    description: '잠수함 라벨 텍스트만 바꿔 텍스트 노드 교체 diff를 재현합니다.',
     expectedLabel: 'text-node replacement',
     verify: function(summary) { return summary.textReplacements > 0; },
     apply: function(area) {
-      var label = area.querySelector('[data-layout-key="marker-aspen"] .ge-marker-label');
-      if (label) label.textContent = 'Aspen Lodge (POTUS)';
-      return 'Aspen Lodge label -> Aspen Lodge (POTUS)';
+      var label = area.querySelector('[data-layout-key="marker-submarine"] .ge-marker-label');
+      if (label) label.textContent = 'Submarine (SSN)';
+      return 'Submarine label -> Submarine (SSN)';
     }
   },
   {
     id: 'attr',
     title: 'Attribute Update',
     badge: 'UPDATE(PROPS)',
-    description: '같은 노드에서 class 속성만 바꿔 prop update를 보여줍니다.',
+    description: '같은 노드에서 class 속성만 바꿔 prop update를 바로 설명할 수 있게 합니다.',
     expectedLabel: 'prop update',
     verify: function(summary) { return summary.types.UPDATE > 0 && summary.propSets > 0; },
     apply: function(area) {
-      var pin = area.querySelector('[data-layout-key="marker-aspen"] .ge-pin');
+      var pin = area.querySelector('[data-layout-key="marker-submarine"] .ge-pin');
       if (pin) pin.className = 'ge-pin ge-pin-blue';
-      return 'Aspen marker class -> ge-pin-blue';
+      return 'Submarine marker class -> ge-pin-blue';
     }
   },
   {
     id: 'create',
     title: 'Node Create',
     badge: 'CREATE',
-    description: '새 마커 노드를 추가해 CREATE patch를 바로 설명할 수 있게 합니다.',
+    description: '새 타깃 마커를 하나 추가해 CREATE patch를 시연합니다.',
     expectedLabel: 'node creation',
     verify: function(summary) { return summary.types.CREATE > 0; },
     apply: function(area) {
@@ -3240,8 +3448,8 @@ var DEMO_CASES = [
       if (map) {
         var newMarker = document.createElement('div');
         newMarker.className = 'ge-marker';
-        newMarker.style.cssText = 'top:58%;left:44%;';
-        newMarker.innerHTML = '<div class="ge-pin ge-pin-yellow"><span class="ge-pin-inner">&#10010;</span></div><span class="ge-marker-label">Demo Marker</span>';
+        newMarker.style.cssText = 'top:43%;left:40%;';
+        newMarker.innerHTML = '<div class="ge-pin ge-pin-yellow"><span class="ge-pin-inner">&#9888;</span></div><span class="ge-marker-label">Demo Target</span>';
         map.appendChild(newMarker);
       }
       return 'Append one new ge-marker node';
@@ -3251,24 +3459,24 @@ var DEMO_CASES = [
     id: 'remove',
     title: 'Node Remove',
     badge: 'REMOVE',
-    description: '기존 마커 하나를 삭제해 REMOVE patch를 안정적으로 재현합니다.',
+    description: 'Pier 4 마커를 삭제해 REMOVE patch를 재현합니다.',
     expectedLabel: 'node removal',
     verify: function(summary) { return summary.types.REMOVE > 0; },
     apply: function(area) {
-      var target = area.querySelector('[data-layout-key="marker-laurel"]');
+      var target = area.querySelector('[data-layout-key="marker-pier4"]');
       if (target && target.parentNode) target.parentNode.removeChild(target);
-      return 'Remove the Laurel Lodge marker';
+      return 'Remove the Pier 4 marker';
     }
   },
   {
     id: 'replace',
     title: 'Element Replace',
     badge: 'REPLACE(ELEMENT)',
-    description: '같은 위치에서 태그 종류만 바꿔 element replace diff를 보여줍니다.',
+    description: '정보 패널 제목의 태그 종류를 바꿔 element replace diff를 보여줍니다.',
     expectedLabel: 'element replacement',
     verify: function(summary) { return summary.elementReplacements > 0; },
     apply: function(area) {
-      var panel = area.querySelector('[data-layout-key="panel-aspen"]');
+      var panel = area.querySelector('[data-layout-key="panel-submarine"]');
       var title = panel ? panel.querySelector('h3') : null;
       if (title && title.parentNode) {
         var next = document.createElement('h2');
@@ -3290,8 +3498,8 @@ var DEMO_CASES = [
     },
     run: function(area) {
       var before = JSON.stringify(containerToVNodes(actualArea));
-      var label = area.querySelector('[data-layout-key="marker-aspen"] .ge-marker-label');
-      if (label) label.textContent = 'Aspen Lodge (History)';
+      var label = area.querySelector('[data-layout-key="marker-submarine"] .ge-marker-label');
+      if (label) label.textContent = 'Submarine (History)';
       addLog('info', 'Patch one text change, then run Undo and Redo');
       var result = handlePatch();
       var afterPatch = JSON.stringify(containerToVNodes(actualArea));
@@ -3406,7 +3614,6 @@ function toggleDemoPanel(force) {
   }
   panel.classList.toggle('show', _demoState.open);
   button.classList.toggle('btn-demo-active', _demoState.open);
-  document.body.classList.toggle('demo-panel-open', _demoState.open);
   if (_demoState.open) renderDemoCases();
   else restoreDemoSnapshot();
 }
@@ -3437,8 +3644,6 @@ function resetDemoBaseline(clearLog) {
   if (selectedEl) { selectedEl.classList.remove('el-selected'); selectedEl = null; }
   if (_camoState.selectedRegionId) selectCamoRegion(null);
   _uiChromeState.showLabels = true;
-  _uiChromeState.forceHideLabels = false;
-  _uiChromeState.forceHideMarkers = false;
   actualArea.innerHTML = SAMPLE_HTML;
   renderToContainer(containerToVNodes(actualArea), testArea);
   applyPersistedLayoutToArea(actualArea);
@@ -3782,11 +3987,6 @@ function handlePatch() {
   updateUI();
   // Auto-switch to actual pane to see result
   switchPane('actual');
-  _uiChromeState.showLabels = false;
-  _uiChromeState.forceHideLabels = true;
-  _uiChromeState.forceHideMarkers = true;
-  updateUiChromeState();
-  addLog('info', 'Markers and labels hidden after patch');
   return { patches: patches, logs: logs, summary: summary };
 }
 function handleUndo() {
@@ -3864,8 +4064,8 @@ function init() {
     switchPane('actual');
     addLog('info', 'Demo baseline restored');
   };
-  document.getElementById('btn-align-reset').onclick = resetLayoutCalibration;
   document.getElementById('btn-align-delete').onclick = deleteSelectedLayoutTarget;
+  document.getElementById('btn-align-reset').onclick = resetLayoutCalibration;
   document.getElementById('btn-align-done').onclick = exitLayoutCalibration;
   document.getElementById('mask-hud-exit').onclick = exitMaskFocus;
   document.getElementById('mask-hud-select').onclick = startCamoSelect;
@@ -3886,12 +4086,12 @@ function init() {
       return;
     }
     if (e.key !== 'Escape') return;
-    if (_camoState.selecting) {
-      startCamoSelect();
-      return;
-    }
     if (_layoutState.active && currentPane === 'actual') {
       exitLayoutCalibration();
+      return;
+    }
+    if (_camoState.selecting) {
+      startCamoSelect();
       return;
     }
     if (_maskFocusState.active) exitMaskFocus();
@@ -3923,13 +4123,13 @@ function init() {
       return;
     }
     if (_maskFocusState.active) {
-      var geMap = getTestGeMap();
-      if (geMap) {
-        var mapRect = geMap.getBoundingClientRect();
-        if (e.clientX >= mapRect.left && e.clientX <= mapRect.right &&
-            e.clientY >= mapRect.top && e.clientY <= mapRect.bottom) {
-          var point = getLocalMapPoint(geMap, e.clientX, e.clientY);
-          var regionMatch = findCamoRegionAtPoint(geMap, point);
+      var geMapClick = getTestGeMap();
+      if (geMapClick) {
+        var mapRectClick = geMapClick.getBoundingClientRect();
+        if (e.clientX >= mapRectClick.left && e.clientX <= mapRectClick.right &&
+            e.clientY >= mapRectClick.top && e.clientY <= mapRectClick.bottom) {
+          var clickPoint = getLocalMapPoint(geMapClick, e.clientX, e.clientY);
+          var regionMatch = findCamoRegionAtPoint(geMapClick, clickPoint);
           if (regionMatch) {
             e.preventDefault();
             e.stopPropagation();
@@ -3952,7 +4152,7 @@ function init() {
     selectElement(target);
   });
 
-  addLog('info', 'Camp David Satellite View initialized');
+  addLog('info', 'Naval Station Norfolk initialized');
   addLog('info', 'Switch to Test pane to edit, then Patch to apply diff');
   addLog('info', 'Use Terrain Camo in Test view to drag, sample, and mask a region');
   updateUiChromeState();
