@@ -1870,6 +1870,7 @@ function applyCamo() {
   renderLassoSelection(geMap, selection, true, false);
   _camoState.masked = true;
   _camoState.selecting = false;
+  updateCamoWorkflowState(); // masked=true 상태로 camo-workflow-active 유지 후 camo-selecting 해제
   persistCamoMetadata(geMap);
   document.body.classList.remove('camo-selecting');
   refreshCamoPanel();
@@ -1934,6 +1935,7 @@ function initCamoSelection() {
       var finalPoint = getLocalMapPoint(geMap, ev.clientX, ev.clientY);
       traceLassoSegment(_camoState.selection, lastPoint.x, lastPoint.y, finalPoint.x, finalPoint.y);
       _camoState.selecting = false;
+      updateCamoWorkflowState(); // camo-workflow-active 먼저 세팅 후 camo-selecting 해제 (라벨 flash 방지)
       document.body.classList.remove('camo-selecting');
 
       if (_camoState.selection && _camoState.selection.points.length >= 3) {
